@@ -1,6 +1,5 @@
 import sqlite3, os, glob
 
-
 class Database:
     def __init__(self):
         self.connection = sqlite3.connect('database/job.db')
