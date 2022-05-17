@@ -7,7 +7,7 @@ class Database:
 
     async def add_job(self, city, message, photo):
         await self.delete_limit_job(city)
-        await self.__write(f"INSERT INTO jobs (city, message, image) VALUES ('{city}', '{message}', '{photo}')")
+        await self.__write(f"""INSERT INTO jobs (city, message, image) VALUES ("{city}", "{message}", "{photo}")""")
 
     async def delete_job(self, message):
         id = await self.get_image_id_by_message(message)
@@ -15,7 +15,7 @@ class Database:
         os.remove(files[0])
 
         # await os.remove(glob.glob(f'file .jpg'))
-        await self.__write(f"delete from jobs where message = '{message}'")
+        await self.__write(f"""delete from jobs where message = "{message}" """)
 
 
     async def delete_limit_job(self, city):
@@ -30,7 +30,7 @@ class Database:
         return await self.__read(f"SELECT * FROM jobs WHERE city = '{city}' ORDER BY id DESC")
 
     async def get_image_id_by_message(self, message):
-        return await self.__read(f"SELECT image FROM jobs WHERE message = '{message}'")
+        return await self.__read(f"""SELECT image FROM jobs WHERE message = "{message}" """)
 
     async def get_image_id_by_id(self, id):
         return await self.__read(f"SELECT image FROM jobs WHERE id = {id}")
