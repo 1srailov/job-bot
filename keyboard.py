@@ -1,9 +1,5 @@
-from turtle import width
 from aiogram.types import ReplyKeyboardMarkup
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
-
-import material
-
 
 langs = ReplyKeyboardMarkup(resize_keyboard=True).add('Toshkent viloyati', 'Andijon viloyati',
 'Buxoro viloyati', 'Farg\'ona viloyati', 'Jizzax viloyati', 'Xorazm viloyati', 'Namangan viloyati', 'Navoiy viloyati',

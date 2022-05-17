@@ -1,6 +1,4 @@
-from distutils.command.config import config
-import json
-from aiogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery
+from aiogram.types import Message, CallbackQuery
 from aiogram import executor
 
 import material
@@ -89,6 +87,7 @@ async def menus(msg: Message):
 
 @dp.channel_post_handler(content_types=['photo'])
 async def channel_post_handler(msg:Message):
+            print()
             for i in list(material.heshtegs.keys()):
                 if i in msg.caption:
                     file = await msg.photo[-1].get_file() 
@@ -103,15 +102,6 @@ async def channel_post_handler(msg:Message):
 async def process_callback_kb1btn1(callback_query:CallbackQuery):
     await db.delete_job(callback_query.message.caption)
     await bot.send_message(admin_id, "muvaqqiyatli ochirildi")
-               
-              
-#     image_accept = await db.get_image_accept(user_id)
-
-#     if image_accept:
-#         await bot.send_photo(admin_id, msg.photo[len(msg.photo) - 1].file_id)
-#         await bot.send_message(admin_id, user_id)
-
-#         await db.update_image_accept(False, user_id)
 
 
 if __name__ == "__main__":
