@@ -6,7 +6,11 @@ class Database:
 
     async def add_job(self, city, message, photo):
         await self.delete_limit_job(city)
-        await self.__write(f"""INSERT INTO jobs (city, message, image) VALUES ("{city}", "{message}", "{photo}")""")
+        c = self.connection.cursor()
+        c.execute("INSERT INTO jobs (city, message, image) VALUES (?, ?, ?)", (city, message, photo))
+        c.close()
+        self.connection.commit()
+
 
     async def delete_job(self, message):
         id = await self.get_image_id_by_message(message)
@@ -14,7 +18,13 @@ class Database:
         os.remove(files[0])
 
         # await os.remove(glob.glob(f'file .jpg'))
-        await self.__write(f"""delete from jobs where message = "{message}" """)
+        await self.__write((message))
+
+        c = self.connection.cursor()
+        c.execute("delete from jobs where message = ? ", (message))
+        c.close()
+        self.connection.commit()
+
 
 
     async def delete_limit_job(self, city):
@@ -24,6 +34,8 @@ class Database:
             files = glob.glob(f'image/{id[0][0]}')
             os.remove(files[0])
             await self.__read(f"delete from jobs where id in (select min(id) from jobs where city = '{city}')")
+
+
     
     async def get_job(self, city):
         return await self.__read(f"SELECT * FROM jobs WHERE city = '{city}' ORDER BY id DESC")
@@ -42,12 +54,4 @@ class Database:
     async def __read(self, query):
         c = self.connection.cursor()
         c.execute(query)
-
         return c.fetchall()
-
-    async def __write(self, query):
-        c = self.connection.cursor()
-        c.execute(query)
-
-        c.close()
-        self.connection.commit()
